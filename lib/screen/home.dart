@@ -10,6 +10,7 @@ import 'package:ngeronda_corona/screen/statistik.dart';
 import 'package:ngeronda_corona/utils/style.dart';
 import 'package:ngeronda_corona/widget/cardnegara_widget.dart';
 import 'package:ngeronda_corona/widget/cardtitle_widget.dart';
+import 'package:ngeronda_corona/widget/popupmenu_widget.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
@@ -82,15 +83,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
         backgroundColor: AppStyle.bg,
         appBar: AppBar(
-          actions: <Widget>[
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.more_vert,
-                color: Colors.white70,
-              ),
-            )
-          ],
+          actions: <Widget>[PopUpMenuWidget()],
           elevation: 1,
           backgroundColor: AppStyle.bg,
           title: Text(
