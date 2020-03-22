@@ -10,7 +10,7 @@ class CountryAllProv with ChangeNotifier {
 
   Future<List<CountryAllModel>> getCountryAll() async {
     final response = await api.client.get('${api.baseUrl}countries');
-    print(response);
+
     if (response.statusCode == 200) {
       print(response);
       notifyListeners();
@@ -18,7 +18,6 @@ class CountryAllProv with ChangeNotifier {
       country = res;
       return country;
     } else {
-      print(response.statusCode);
       return null;
     }
   }
