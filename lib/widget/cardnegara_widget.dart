@@ -29,7 +29,7 @@ class CardNegara extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+    //final height = MediaQuery.of(context).size.height;
     return Container(
         width: width,
         decoration: BoxDecoration(
@@ -58,10 +58,13 @@ class CardNegara extends StatelessWidget {
                     valueC,
                     style: TextStyle(color: AppStyle.confirmed),
                   ),
-                  Text(
-                    '(' + valueCtoday + ' hari ini)',
-                    style: TextStyle(color: AppStyle.confirmed, fontSize: 12),
-                  ),
+                  (valueCtoday == null)
+                      ? SizedBox.shrink()
+                      : Text(
+                          '(' + valueCtoday + ' hari ini)',
+                          style: TextStyle(
+                              color: AppStyle.confirmed, fontSize: 12),
+                        ),
                 ],
               ),
             ),
@@ -136,10 +139,12 @@ class CardNegara extends StatelessWidget {
                     valueD,
                     style: TextStyle(color: AppStyle.death),
                   ),
-                  Text(
-                    '(' + valueDtoday + ' hari ini)',
-                    style: TextStyle(color: AppStyle.death, fontSize: 12),
-                  ),
+                  (valueDtoday == null)
+                      ? SizedBox.shrink()
+                      : Text(
+                          '(' + valueDtoday + ' hari ini)',
+                          style: TextStyle(color: AppStyle.death, fontSize: 12),
+                        ),
                   // Text(
                   //   'orang',
                   //   style: TextStyle(color: AppStyle.death),

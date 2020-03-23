@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ngeronda_corona/provider/country_prov.dart';
 import 'package:ngeronda_corona/provider/countryall_prov.dart';
 import 'package:ngeronda_corona/utils/style.dart';
 import 'package:ngeronda_corona/widget/cardnegara_widget.dart';
@@ -22,16 +21,15 @@ class _AllCountryState extends State<AllCountry> {
   @override
   Widget build(BuildContext context) {
     var country = Provider.of<CountryAllProv>(context).country;
-    print(country);
+
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    DateFormat df = DateFormat("dd-MM-yyyy HH:mm:ss");
     final nf = NumberFormat("#,###");
     return Scaffold(
       appBar: AppBar(
         elevation: 1,
         title: Text(
-          "Semua Negara",
+          "Global Detail",
           style: TextStyle(color: Colors.white70),
         ),
         backgroundColor: AppStyle.bg,
@@ -62,7 +60,7 @@ class _AllCountryState extends State<AllCountry> {
                           height: 8.0,
                         ),
                         CardNegara(
-                            titleC: 'Dikonfirmasi',
+                            titleC: 'Terkonfirmasi',
                             titleA: 'Aktif',
                             titleD: 'Meninggal',
                             titleR: 'Sembuh',

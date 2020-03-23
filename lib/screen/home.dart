@@ -1,18 +1,24 @@
+import 'package:connectivity/connectivity.dart';
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:ngeronda_corona/provider/analisis_prov.dart';
 import 'package:ngeronda_corona/provider/country_prov.dart';
 import 'package:ngeronda_corona/provider/countryall_prov.dart';
 import 'package:ngeronda_corona/provider/home_prov.dart';
 import 'package:ngeronda_corona/provider/kasusindo_prov.dart';
+import 'package:ngeronda_corona/provider/provinsi_prov.dart';
 import 'package:ngeronda_corona/screen/all_country.dart';
 import 'package:ngeronda_corona/screen/history_indo.dart';
-import 'package:ngeronda_corona/screen/statistik.dart';
+import 'package:ngeronda_corona/screen/provinsi_indo.dart';
 import 'package:ngeronda_corona/utils/style.dart';
 import 'package:ngeronda_corona/widget/cardnegara_widget.dart';
 import 'package:ngeronda_corona/widget/cardtitle_widget.dart';
 import 'package:ngeronda_corona/widget/popupmenu_widget.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
+
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 class Home extends StatefulWidget {
@@ -23,16 +29,49 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Geolocator geolocator = Geolocator();
+  Position userLoc;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+  AndroidDeviceInfo info;
   // DateFormat fn = DateFormat("M-dd-yyyy");
   // String _selectedLocation = "ID";
   // String datetime = '2-18-2020';
+  String infoDevice;
+
+  getDevice() async {
+    info = await deviceInfo.androidInfo;
+  }
+
+  Future<Position> _getLocation() async {
+    var currentLocation;
+    try {
+      currentLocation = await geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+    } catch (e) {
+      currentLocation = null;
+    }
+    return currentLocation;
+  }
+
+  postAnalis() async {
+    await new Future.delayed(const Duration(seconds: 5));
+    Provider.of<AnalisProv>(context, listen: false).createAnalis(
+        info.model, info.brand, userLoc.latitude, userLoc.longitude);
+  }
 
   String countryId = "indonesia";
   @override
   void initState() {
+    _getLocation().then((position) {
+      userLoc = position;
+    });
+
+    getDevice();
+
     // final now = DateTime.now();
 
     super.initState();
@@ -40,9 +79,33 @@ class _HomeState extends State<Home> {
     //   datetime = fn.format(DateTime(now.year, now.month, now.day - 1));
     // });
     Provider.of<HomeProv>(context, listen: false).getHomeProv();
+    Provider.of<ProvinsiProv>(context, listen: false).getProvinsi();
     Provider.of<CountryProv>(context, listen: false).getCountry(countryId);
     Provider.of<CountryAllProv>(context, listen: false).getCountryAll();
     Provider.of<KasusIndoProv>(context, listen: false).getKasusIndo();
+    postAnalis();
+  }
+
+  Connectivity _connectivity;
+  StreamSubscription<ConnectivityResult> _subscription;
+
+  ConstructorForWhateverClassThisIs() {
+    _connectivity = new Connectivity();
+    _subscription =
+        _connectivity.onConnectivityChanged.listen(onConnectivityChange);
+  }
+
+  void onConnectivityChange(ConnectivityResult result) {
+    if (result == ConnectivityResult.none) {
+      _scaffoldKey.currentState.showSnackBar(
+          new SnackBar(content: new Text("No internet connection")));
+    }
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 
   @override
@@ -67,6 +130,7 @@ class _HomeState extends State<Home> {
         Provider.of<CountryProv>(context, listen: false).getCountry(countryId);
         Provider.of<CountryAllProv>(context, listen: false).getCountryAll();
         Provider.of<KasusIndoProv>(context, listen: false).getKasusIndo();
+        Provider.of<ProvinsiProv>(context, listen: false).getProvinsi();
         _scaffoldKey.currentState?.showSnackBar(SnackBar(
             content: const Text(
               'Refresh complete',
@@ -81,6 +145,7 @@ class _HomeState extends State<Home> {
     }
 
     return Scaffold(
+        key: _scaffoldKey,
         backgroundColor: AppStyle.bg,
         appBar: AppBar(
           actions: <Widget>[PopUpMenuWidget()],
@@ -150,27 +215,46 @@ class _HomeState extends State<Home> {
                         SizedBox(
                           height: 16.0,
                         ),
-                        Text(
-                          "Global",
-                          style: AppStyle.title,
+                        // RaisedButton(
+                        //   onPressed: () {
+                        //     print(userLoc.latitude);
+                        //   },
+                        //   child: Text('test'),
+                        // ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              "Global",
+                              style: AppStyle.title,
+                            ),
+                            GestureDetector(
+                              onTap: () => Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          AllCountry())),
+                              child: Text(
+                                'Lihat detail',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+
                         SizedBox(
                           height: 16.0,
                         ),
-                        GestureDetector(
-                          onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      StatistikPage())),
-                          child: CardTitle(
-                            stat: '',
-                            styleOrang: TextStyle(color: Colors.yellow[500]),
-                            title: 'Dikonfirmasi',
-                            styleTitle: AppStyle.txtconfirmed,
-                            styleValue: AppStyle.confirmedvalue,
-                            value: nf.format(home?.cases) ?? '',
-                          ),
+                        CardTitle(
+                          stat: '',
+                          styleOrang: TextStyle(color: Colors.yellow[500]),
+                          title: 'Terkonfirmasi',
+                          styleTitle: AppStyle.txtconfirmed,
+                          styleValue: AppStyle.confirmedvalue,
+                          value: nf.format(home?.cases) ?? '',
                         ),
                         SizedBox(
                           height: 16.0,
@@ -243,9 +327,9 @@ class _HomeState extends State<Home> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (BuildContext context) =>
-                                          AllCountry())),
+                                          ProvinsiPage())),
                               child: Text(
-                                'Lihat semua',
+                                'Lihat provinsi',
                                 style: TextStyle(
                                   color: Colors.white70,
                                 ),
@@ -263,7 +347,7 @@ class _HomeState extends State<Home> {
                                   builder: (BuildContext context) =>
                                       HistoryIndo())),
                           child: CardNegara(
-                              titleC: 'Dikonfirmasi',
+                              titleC: 'Terkonfirmasi',
                               titleA: 'Aktif',
                               titleD: 'Meninggal',
                               titleR: 'Sembuh',

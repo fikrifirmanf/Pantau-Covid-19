@@ -31,6 +31,15 @@ class AboutPage extends StatelessWidget {
     }
   }
 
+  _launchURLJateng() async {
+    const url = 'https://corona.jatengprov.go.id/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +105,15 @@ class AboutPage extends StatelessWidget {
                   onTap: _launchURLGithub,
                   child: Text(
                     "Data source : https://github.com/NovelCOVID/API",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ),
+                SizedBox(height: 16.0),
+                GestureDetector(
+                  onTap: _launchURLJateng,
+                  child: Text(
+                    "Data source : https://corona.jatengprov.go.id/",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white70),
                   ),

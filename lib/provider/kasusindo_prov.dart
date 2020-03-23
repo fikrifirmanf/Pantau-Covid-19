@@ -8,7 +8,7 @@ class KasusIndoProv with ChangeNotifier {
 
   Future<KasusIndoModel> getKasusIndo() async {
     final response = await api.client.get(api.kasusIndoUrl);
-    print(response);
+
     if (response.statusCode == 200) {
       notifyListeners();
       var res = kasusIndoModelFromJson(response.body);

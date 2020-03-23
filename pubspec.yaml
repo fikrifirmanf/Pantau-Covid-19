@@ -1,5 +1,5 @@
 name: ngeronda_corona
-description: A new Flutter project.
+description: Aplikasi monitoring Covid-19.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -25,6 +25,12 @@ dependencies:
   liquid_pull_to_refresh: ^1.1.1
   fl_chart: ^0.8.6
   url_launcher: ^5.4.2
+  flutter_offline: ^0.3.0
+  connectivity: ^0.4.8+2
+  geolocator: ^5.3.0
+  webview_flutter: ^0.3.19+9
+
+  device_info: ^0.4.2+1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -33,6 +39,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.7.0"
+flutter_icons:
+  ios: true
+  android: "launcher_icon"
+  image_path: "assets/launcher/icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

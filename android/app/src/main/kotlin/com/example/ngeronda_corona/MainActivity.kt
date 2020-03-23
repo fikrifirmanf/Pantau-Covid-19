@@ -1,4 +1,4 @@
-package com.example.ngeronda_corona
+package com.fikrifirmanf.pantaucovid19
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
