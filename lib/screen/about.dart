@@ -31,8 +31,17 @@ class AboutPage extends StatelessWidget {
     }
   }
 
-  _launchURLJateng() async {
-    const url = 'https://corona.jatengprov.go.id/';
+  _launchURLKawal() async {
+    const url = 'https://kawalcorona.com/';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  _launchURLLouis() async {
+    const url = 'https://louislugas.github.io/';
     if (await canLaunch(url)) {
       await launch(url);
     } else {
@@ -109,11 +118,18 @@ class AboutPage extends StatelessWidget {
                     style: TextStyle(color: Colors.white70),
                   ),
                 ),
-                SizedBox(height: 16.0),
                 GestureDetector(
-                  onTap: _launchURLJateng,
+                  onTap: _launchURLKawal,
                   child: Text(
-                    "Data source : https://corona.jatengprov.go.id/",
+                    "Data source : https://kawalcorona.com/",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: _launchURLLouis,
+                  child: Text(
+                    "Data source : https://louislugas.github.io/",
                     textAlign: TextAlign.center,
                     style: TextStyle(color: Colors.white70),
                   ),

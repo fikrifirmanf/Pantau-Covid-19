@@ -12,41 +12,53 @@ String provinsiModelToJson(List<ProvinsiModel> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ProvinsiModel {
-  String prov;
-  double odp;
-  int pdp;
-  int positif;
-  int dirawat;
-  int sembuh;
-  int meninggal;
+  Attributes attributes;
 
   ProvinsiModel({
-    this.prov,
-    this.odp,
-    this.pdp,
-    this.positif,
-    this.dirawat,
-    this.sembuh,
-    this.meninggal,
+    this.attributes,
   });
 
   factory ProvinsiModel.fromJson(Map<String, dynamic> json) => ProvinsiModel(
-        prov: json["prov"],
-        odp: json["odp"],
-        pdp: json["pdp"],
-        positif: json["positif"],
-        dirawat: json["dirawat"],
-        sembuh: json["sembuh"],
-        meninggal: json["meninggal"],
+        attributes: Attributes.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "prov": prov,
-        "odp": odp,
-        "pdp": pdp,
-        "positif": positif,
-        "dirawat": dirawat,
-        "sembuh": sembuh,
-        "meninggal": meninggal,
+        "attributes": attributes.toJson(),
+      };
+}
+
+class Attributes {
+  int fid;
+  int kodeProvi;
+  String provinsi;
+  int kasusPosi;
+  int kasusSemb;
+  int kasusMeni;
+
+  Attributes({
+    this.fid,
+    this.kodeProvi,
+    this.provinsi,
+    this.kasusPosi,
+    this.kasusSemb,
+    this.kasusMeni,
+  });
+
+  factory Attributes.fromJson(Map<String, dynamic> json) => Attributes(
+        fid: json["FID"],
+        kodeProvi: json["Kode_Provi"],
+        provinsi: json["Provinsi"],
+        kasusPosi: json["Kasus_Posi"],
+        kasusSemb: json["Kasus_Semb"],
+        kasusMeni: json["Kasus_Meni"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "FID": fid,
+        "Kode_Provi": kodeProvi,
+        "Provinsi": provinsi,
+        "Kasus_Posi": kasusPosi,
+        "Kasus_Semb": kasusSemb,
+        "Kasus_Meni": kasusMeni,
       };
 }

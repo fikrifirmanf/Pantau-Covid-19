@@ -20,7 +20,7 @@ class ProvinsiPage extends StatelessWidget {
       appBar: AppBar(
         elevation: 1,
         title: Text(
-          "Provinsi Indonesia",
+          "Semua Provinsi",
           style: TextStyle(color: Colors.white70),
         ),
         backgroundColor: AppStyle.bg,
@@ -42,7 +42,7 @@ class ProvinsiPage extends StatelessWidget {
                           height: 16.0,
                         ),
                         Text(
-                          prov[i].prov,
+                          prov[i].attributes.provinsi,
                           style: TextStyle(
                               color: Colors.white70,
                               fontWeight: FontWeight.bold),
@@ -56,13 +56,29 @@ class ProvinsiPage extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
                                       ProvinsiDetailPage(
-                                        prov: prov[i].prov,
-                                        odp: prov[i].odp.toString(),
-                                        pdp: prov[i].pdp.toString(),
-                                        positif: prov[i].positif.toString(),
-                                        dirawat: prov[i].dirawat.toString(),
-                                        sembuh: prov[i].sembuh.toString(),
-                                        meninggal: prov[i].meninggal.toString(),
+                                        prov: prov[i].attributes.provinsi,
+                                        urlMap: (prov[i].attributes.provinsi ==
+                                                "Jawa Tengah")
+                                            ? "https://corona.jatengprov.go.id/home/maps_kabko"
+                                            : null,
+                                        positif: prov[i]
+                                            .attributes
+                                            .kasusPosi
+                                            .toString(),
+                                        dirawat: (prov[i].attributes.kasusPosi -
+                                                (prov[i].attributes.kasusSemb +
+                                                    prov[i]
+                                                        .attributes
+                                                        .kasusMeni))
+                                            .toString(),
+                                        sembuh: prov[i]
+                                            .attributes
+                                            .kasusSemb
+                                            .toString(),
+                                        meninggal: prov[i]
+                                            .attributes
+                                            .kasusMeni
+                                            .toString(),
                                       ))),
                           child: CardNegara(
                               titleC: 'Terkonfirmasi',
@@ -71,18 +87,26 @@ class ProvinsiPage extends StatelessWidget {
                               titleR: 'Sembuh',
                               valueCtoday: null,
                               valueDtoday: null,
-                              valueC: (prov[i]?.positif == null)
+                              valueC: (prov[i]?.attributes?.kasusPosi == null)
                                   ? ''
-                                  : nf.format(prov[i]?.positif),
-                              valueA: (prov[i]?.positif == null)
+                                  : nf.format(prov[i]?.attributes?.kasusPosi),
+                              valueA: ((prov[i].attributes.kasusPosi -
+                                          (prov[i].attributes.kasusSemb +
+                                              prov[i].attributes.kasusMeni)) ==
+                                      null)
                                   ? ''
-                                  : nf.format(prov[i].dirawat) ?? '',
-                              valueR: (prov[i]?.sembuh == null)
+                                  : nf.format((prov[i].attributes.kasusPosi -
+                                          (prov[i].attributes.kasusSemb +
+                                              prov[i].attributes.kasusMeni))) ??
+                                      '',
+                              valueR: (prov[i]?.attributes?.kasusSemb == null)
                                   ? ''
-                                  : nf.format(prov[i]?.sembuh) ?? '',
-                              valueD: (prov[i]?.meninggal == null)
+                                  : nf.format(prov[i]?.attributes?.kasusSemb) ??
+                                      '',
+                              valueD: (prov[i]?.attributes?.kasusMeni == null)
                                   ? ''
-                                  : nf.format(prov[i]?.meninggal) ?? ''),
+                                  : nf.format(prov[i]?.attributes?.kasusMeni) ??
+                                      ''),
                         ),
                         SizedBox(
                           height: 8.0,

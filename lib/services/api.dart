@@ -5,5 +5,5 @@ class Api {
   final String kasusIndoUrl =
       "https://louislugas.github.io/covid_19_cluster/json/kasus-corona-indonesia.json";
   Client client = Client();
-  final String provIndoUrl = "http://prmkarangtawang.org/api_covid/jateng.php";
+  final String provIndoUrl = "https://api.kawalcorona.com/indonesia/provinsi/";
 }

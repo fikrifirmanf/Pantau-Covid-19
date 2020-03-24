@@ -5,14 +5,13 @@ import 'package:ngeronda_corona/utils/style.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProvinsiDetailPage extends StatefulWidget {
-  String prov, positif, pdp, odp, dirawat, sembuh, meninggal;
+  String prov, positif, urlMap, dirawat, sembuh, meninggal;
   ProvinsiDetailPage(
       {this.prov,
       this.positif,
       this.dirawat,
-      this.odp,
+      this.urlMap,
       this.meninggal,
-      this.pdp,
       this.sembuh});
   @override
   _ProvinsiDetailPageState createState() => _ProvinsiDetailPageState();
@@ -37,17 +36,18 @@ class _ProvinsiDetailPageState extends State<ProvinsiDetailPage> {
       backgroundColor: AppStyle.bg,
       body: Container(
         child: ListView(children: [
-          Container(
-            height: height / 2.3,
-            width: width,
-            child: WebView(
-              javascriptMode: JavascriptMode.unrestricted,
-              initialUrl: 'https://corona.jatengprov.go.id/home/maps_kabko',
-              onWebViewCreated: (WebViewController webViewController) {
-                _controller.complete(webViewController);
-              },
-            ),
-          ),
+          (widget.urlMap != null)
+              ? Container(
+                  height: height / 2.3,
+                  width: width,
+                  child: WebView(
+                    javascriptMode: JavascriptMode.unrestricted,
+                    initialUrl: widget.urlMap,
+                    onWebViewCreated: (WebViewController webViewController) {
+                      _controller.complete(webViewController);
+                    },
+                  ))
+              : SizedBox.shrink(),
           Container(
             padding: EdgeInsets.symmetric(
               vertical: 16.0,
@@ -56,40 +56,6 @@ class _ProvinsiDetailPageState extends State<ProvinsiDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  "Orang Dalam Pengawasan (ODP)",
-                  style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  widget?.odp ?? "-",
-                  style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
-                Text(
-                  "Pasien Dalam Pengawasan (PDP)",
-                  style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  widget?.pdp ?? "-",
-                  style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: 8.0,
-                ),
                 Text(
                   "Terkonfirmasi",
                   style: TextStyle(
